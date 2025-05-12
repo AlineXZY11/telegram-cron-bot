@@ -5,17 +5,17 @@ import requests
 import time
 
 # Config
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # Ambil dari secret Fly.io
-CHAT_ID = os.getenv("CHAT_ID")      # Ambil dari secret Fly.io
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 SCHEDULE = [
     "06:00", "07:48", "09:15", "09:36", "11:24",
     "13:12", "14:00", "15:00", "16:48", "18:15",
     "18:36", "20:24", "22:00", "22:12", "00:00"
 ]
 
-# Database SQLite
+# Database Setup
 def init_db():
-    conn = sqlite3.connect('/data/notifications.db')  # Simpan di volume persisten
+    conn = sqlite3.connect('notifications.db')
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS logs (
@@ -27,28 +27,25 @@ def init_db():
     conn.commit()
     conn.close()
 
-def save_log(time):
-    conn = sqlite3.connect('/data/notifications.db')
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO logs (time) VALUES (?)", (time,))
-    conn.commit()
-    conn.close()
-
-def send_telegram_message(message):
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    params = {"chat_id": CHAT_ID, "text": message}
-    requests.post(url, json=params)
-
-def check_schedule():
+def send_notification():
     init_db()
     while True:
         now = datetime.now().strftime("%H:%M")
         if now in SCHEDULE:
-            message = f"🔔 Notifikasi {now}"
-            send_telegram_message(message)
-            save_log(now)
-            time.sleep(60)  # Hindari duplikasi dalam 1 menit
-        time.sleep(30)  # Cek setiap 30 detik
+            # Kirim pesan
+            url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+            params = {"chat_id": CHAT_ID, "text": f"⏰ Notifikasi {now}"}
+            requests.post(url, json=params)
+            
+            # Simpan ke database
+            conn = sqlite3.connect('notifications.db')
+            conn.execute("INSERT INTO logs (time) VALUES (?)", (now,))
+            conn.commit()
+            conn.close()
+            
+            print(f"Notifikasi terkirim: {now}")
+            time.sleep(60)  # Hindari duplikat
+        time.sleep(30)
 
 if __name__ == "__main__":
-    check_schedule()
+    send_notification()
