@@ -10,3 +10,11 @@
     }
   }
 }
+{
+  "deploy": {
+    "restartPolicy": {
+      "type": "ALWAYS",
+      "maxRetries": 5
+    }
+  }
+}
