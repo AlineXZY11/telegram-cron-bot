@@ -9,10 +9,5 @@
       "type": "ALWAYS"
     }
   }
-  "deploy": {
-    "restartPolicy": {
-      "type": "ALWAYS",
-      "maxRetries": 5
-    }
-  }
 }
+
