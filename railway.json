@@ -1,0 +1,12 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "config": {}
+  },
+  "deploy": {
+    "startCommand": "python app.py",
+    "restartPolicy": {
+      "type": "ALWAYS"
+    }
+  }
+}
