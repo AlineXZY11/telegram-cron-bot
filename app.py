@@ -64,3 +64,9 @@ def send_notification():
 
 if __name__ == "__main__":
     send_notification()
+
+try:
+    send_notification()
+except Exception as e:
+    print(f"ERROR: {str(e)}")
+    time.sleep(60)  # Tunggu sebelum restart
