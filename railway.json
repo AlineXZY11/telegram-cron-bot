@@ -9,8 +9,6 @@
       "type": "ALWAYS"
     }
   }
-}
-{
   "deploy": {
     "restartPolicy": {
       "type": "ALWAYS",
