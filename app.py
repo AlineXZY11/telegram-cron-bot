@@ -3,7 +3,7 @@ import sqlite3
 from datetime import datetime
 import requests
 import time
-mport psycopg2
+import psycopg2
 from urllib.parse import urlparse
 
 # Ambil database URL dari Railway
