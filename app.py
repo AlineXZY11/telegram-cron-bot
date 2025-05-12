@@ -30,7 +30,7 @@ def init_db():
 def send_notification():
     init_db()
     while True:
-        now = datetime.now().strftime("11:42")
+        now = datetime.now().strftime("%H:%M")
         if now in SCHEDULE:
             # Kirim pesan
             url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
