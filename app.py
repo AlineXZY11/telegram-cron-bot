@@ -3,6 +3,21 @@ import sqlite3
 from datetime import datetime
 import requests
 import time
+mport psycopg2
+from urllib.parse import urlparse
+
+# Ambil database URL dari Railway
+DB_URL = os.getenv("DATABASE_URL")
+db_info = urlparse(DB_URL)
+
+def init_db():
+    conn = psycopg2.connect(
+        host=db_info.hostname,
+        database=db_info.path[1:],
+        user=db_info.username,
+        password=db_info.password,
+        port=db_info.port
+    )
 
 # Config
 BOT_TOKEN = os.getenv("BOT_TOKEN")
